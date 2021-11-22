@@ -1,98 +1,59 @@
-import { Card, ButtonGroup, Button, Toast, Frame, Page } from '@shopify/polaris';
-import React, { useState, useCallback } from 'react';
+import { Card, Toast, Frame, Page, Heading } from '@shopify/polaris';
+import React, { useState, } from 'react';
 import StepWizard from "react-step-wizard";
+import ContentConfiguration from './formSteps/step1';
+import CurrencyConfiguration from './formSteps/step2';
+import StyleConfiguration from './formSteps/step3';
+import TargetingConfiguration from './formSteps/step4';
 
-const ContentConfiguration = (props) => {
-    const {currentStep,firstStep,goToStep,goToNamedStep,isActive,lastStep,nextStep,previousStep,stepName,totalSteps,transitions} = props;
-    console.log("ContentConfiguration", props);
-    return (
-        <div>
-            <h3>Basic Info</h3>
-            <h2>Step {currentStep}</h2>
-            <p>Total Steps: {totalSteps}</p>
-            <p>Is Active: {isActive}</p>
-            <input type="text"></input>
-            <input type="number"></input>
-            <input type="email"></input>
-            <ButtonGroup>
-                <Button onClick={() => previousStep()}>Previous Step</Button>
-                <Button onClick={() => nextStep()}>Finish</Button>
-            </ButtonGroup>
-        </div>
-    )
-}
-const CurrencyConfiguration = (props) => {
-    const {currentStep,firstStep,goToStep,goToNamedStep,isActive,lastStep,nextStep,previousStep,stepName,totalSteps,transitions} = props;
-    console.log("CurrencyConfiguration", props);
-    return (
-        <div>
-            <h3>Contact Info</h3>
-            <h2>Step {currentStep}</h2>
-            <p>Total Steps: {totalSteps}</p>
-            <p>Is Active: {isActive}</p>
-            <input type="text"></input>
-            <input type="number"></input>
-            <input type="email"></input>
-            <ButtonGroup>
-                <Button onClick={() => previousStep()}>Previous Step</Button>
-                <Button onClick={() => nextStep()}>Next Step</Button>
-            </ButtonGroup>
-        </div>
-    )
-}
-const StyleConfiguration = (props) => {
-    const {currentStep,firstStep,goToStep,goToNamedStep,isActive,lastStep,nextStep,previousStep,stepName,totalSteps,transitions} = props;
-    console.log("StyleConfiguration", props);
-    return (
-        <div>
-            <h3>Contact Info</h3>
-            <h2>Step {currentStep}</h2>
-            <p>Total Steps: {totalSteps}</p>
-            <p>Is Active: {isActive}</p>
-            <input type="text"></input>
-            <input type="number"></input>
-            <input type="email"></input>
-            <ButtonGroup>
-                <Button onClick={() => previousStep()}>Previous Step</Button>
-                <Button onClick={() => nextStep()}>Next Step</Button>
-            </ButtonGroup>
-        </div>
-    )
-}
-const TargetingConfiguration = (props) => {
-    const {currentStep,firstStep,goToStep,goToNamedStep,isActive,lastStep,nextStep,previousStep,stepName,totalSteps,transitions} = props;
-    console.log("targetingConfiguration", props);
-
-    const [active, setActive] = useState(false);
-    const toggleActive = useCallback(() => setActive((active) => !active), []);
-    const toastMarkup = active ? (
-        <Toast content="Message sent" onDismiss={toggleActive} />
-    ) : null;
-
-    return (
-        <div>
-            <h3>Terms Conditions</h3>
-            <h2>Step {currentStep}</h2>
-            <p>Total Steps: {totalSteps}</p>
-            <input type="text"></input>
-            <input type="number"></input>
-            <input type="email"></input>
-            <ButtonGroup>
-                <Button onClick={() => previousStep()}>Previous Step</Button>
-                <Button onClick={() => toggleActive()}>Finish</Button>
-            </ButtonGroup>
-            {toastMarkup}
-        </div>
-    )
-}
 
 const Form = (props) => {
+    const [previewBarData1,setPreviewBarData1] = useState({});
+    let msgBefore1="Free shipping for order over";
+    
+    const pullData = (data) => {
+        // console.log("pullData",data);
+        msgBefore1=data.msgBefore1;
+    }
+    
     return (
         <section style={{ maxWidth: "1000px", margin: "20px auto" }}>
             <Frame>
                 <Card sectioned subdued>
+                    <Heading>Preview</Heading>
+                    <div className="preview-section">
+                        <div className="row">
+                            <div className="msg1Preview">
+                                <div className="preview-bar">
+                                    <span>{msgBefore1} </span>
+                                    <span className="currency">
+                                        <span className="currency-format">{"INR"}</span>
+                                        <span className="currency-total">{"1000"}</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="msg2Preview">
+                                <div className="preview-bar">
+                                    <span>Only
+                                        <span className="currency">
+                                            <span className="currency-format">{"INR"}</span>
+                                            <span className="currency-total">{"100"}</span>
+                                        </span>
+                                        away from free shipping </span>
+                                </div>
+                            </div>
+                            <div className="msg3Preview">
+                                <div className="preview-bar">
+                                    <span>Congratulations! You've got free shipping</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+                <Card sectioned subdued>
+                    {/* HELLOO */}
                     <StepWizard>
-                        <ContentConfiguration stepName={"ContentConfiguration"} />
+                        <ContentConfiguration stepName={"ContentConfiguration"} pullData={pullData}/>
                         <CurrencyConfiguration stepName={"CurrencyConfiguration"} />
                         <StyleConfiguration stepName={"StyleConfiguration"} />
                         <TargetingConfiguration stepName={"targetingConfiguration"} />

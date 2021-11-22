@@ -8,3 +8,30 @@ a:active, a:hover, a:visited {
 a:hover{
     text-decoration: underline;
 }
+
+/*form section*/
+
+.lock-icon{
+    display: inline-block;
+}
+.preview-bar {
+    background: grey;
+    margin: 10px 0px ;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+}
+.preview-bar .currency{
+    margin-left: 5px;
+    margin-right: 5px;
+    color: aqua;
+}
+.preview-bar .currency .currency-format, .preview-bar .currency .currency-total{
+    margin-left: 2px;
+    margin-right: 2px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/*form section end*/
