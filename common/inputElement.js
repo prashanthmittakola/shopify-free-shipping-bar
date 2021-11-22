@@ -1,9 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import {
-  TextField,
-  AppProvider,
-  Frame,
-} from "@shopify/polaris";
+import { TextField, AppProvider, Frame, Select } from "@shopify/polaris";
 // import ReactQuill from 'react-quill';
 // import dynamic from "next/dynamic";
 
@@ -11,6 +7,29 @@ import {
 
 // import "react-quill/dist/quill.snow.css";
 
+const SelectBox = ({ label, options, onChange, selected, id, helpText }) => {
+  return (
+    <Select
+      label={label}
+      options={options}
+      onChange={onChange}
+      value={selected}
+      id={id}
+      helpText={helpText}
+    />
+  );
+};
+
+const SingleChoiceList = ({ title, choices, selected, onChange }) => {
+  return (
+    <ChoiceList
+      title={title}
+      choices={choices}
+      selected={selected}
+      onChange={onChange}
+    />
+  );
+};
 
 const InputElement = ({
   type,
@@ -23,7 +42,7 @@ const InputElement = ({
   error,
   helpText,
   disabled,
-  placeholder
+  placeholder,
 }) => {
   return (
     <>
@@ -34,14 +53,18 @@ const InputElement = ({
         id={id}
         value={value.toString()}
         onChange={onChange}
-        placeholder={!placeholder?`Enter ${label ? label : "value"}`:placeholder}
+        placeholder={
+          !placeholder ? `Enter ${label ? label : "value"}` : placeholder
+        }
         style={style}
         error={error}
         helpText={helpText}
         disabled={disabled}
+        min={type == "number" ? 0 : null}
       />
     </>
   );
 };
 
 export default InputElement;
+export { SelectBox, SingleChoiceList };
