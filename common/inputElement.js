@@ -1,5 +1,14 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { TextField, AppProvider, Frame, Select } from "@shopify/polaris";
+import {
+  TextField,
+  AppProvider,
+  Frame,
+  Select,
+  ChoiceList,
+  Checkbox,
+  ColorPicker,
+  RangeSlider,
+} from "@shopify/polaris";
 // import ReactQuill from 'react-quill';
 // import dynamic from "next/dynamic";
 
@@ -7,7 +16,15 @@ import { TextField, AppProvider, Frame, Select } from "@shopify/polaris";
 
 // import "react-quill/dist/quill.snow.css";
 
-const SelectBox = ({ label, options, onChange, selected, id, helpText }) => {
+const SelectBox = ({
+  label,
+  options,
+  onChange,
+  selected,
+  id,
+  helpText,
+  disabled,
+}) => {
   return (
     <Select
       label={label}
@@ -16,19 +33,59 @@ const SelectBox = ({ label, options, onChange, selected, id, helpText }) => {
       value={selected}
       id={id}
       helpText={helpText}
+      disabled={disabled}
     />
   );
 };
 
-const SingleChoiceList = ({ title, choices, selected, onChange }) => {
+const ColorPickerBox = (props) => {
+  const [color, setColor] = useState({
+    hue: 120,
+    brightness: 1,
+    saturation: 1,
+  });
+  return <ColorPicker onChange={setColor} color={color} />;
+};
+
+const RangeSliderWithControl = (props) => {
+  const {
+    output,
+    label,
+    min,
+    max,
+    step,
+    rangeValue,
+    onChange,
+    helpText,
+  } = props;
+
+  return (
+    <RangeSlider
+      output
+      label={label}
+      min={min}
+      max={max}
+      step={step}
+      value={rangeValue}
+      onChange={onChange}
+      helpText={helpText}
+    />
+  );
+};
+
+const SingleChoiceList = ({ title, choices, selected, onChange, id }) => {
   return (
     <ChoiceList
       title={title}
+      id={id}
       choices={choices}
       selected={selected}
       onChange={onChange}
     />
   );
+};
+const SingleCheckbox = ({ checked, onChange, label }) => {
+  return <Checkbox label={label} checked={checked} onChange={onChange} />;
 };
 
 const InputElement = ({
@@ -43,6 +100,7 @@ const InputElement = ({
   helpText,
   disabled,
   placeholder,
+  connectedRight,
 }) => {
   return (
     <>
@@ -61,10 +119,17 @@ const InputElement = ({
         helpText={helpText}
         disabled={disabled}
         min={type == "number" ? 0 : null}
+        connectedRight={connectedRight}
       />
     </>
   );
 };
 
 export default InputElement;
-export { SelectBox, SingleChoiceList };
+export {
+  SelectBox,
+  SingleChoiceList,
+  SingleCheckbox,
+  ColorPickerBox,
+  RangeSliderWithControl,
+};

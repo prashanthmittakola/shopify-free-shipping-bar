@@ -17,8 +17,23 @@ const Form = (props) => {
     progressMsgAfter,
     goalAchievedMsg,
   } = previewBarData;
+
+  /*barStyle*/
+  const [barStyle, setBarStyle] = useState({});
+  const {
+    backgroundColor,
+    textColor,
+    specialTextColor,
+    backgroundOpacity,
+  } = barStyle;
+
+  const progressBarShippingGoal =
+    freeShippingGoal == undefined ? Math.random() * 200 : freeShippingGoal - 1;
   const pullData = (data) => {
     setPreviewBarData(data);
+  };
+  const stylePullData = (data) => {
+    setBarStyle(data);
   };
 
   return (
@@ -32,9 +47,18 @@ const Form = (props) => {
               <div className="row">
                 {/* shippingBar01 */}
                 <div className="msg1Preview">
-                  <div className="preview-bar">
+                  <div
+                    className="preview-bar"
+                    style={{
+                      backgroundColor: backgroundColor ?? "black",
+                      color: textColor ?? "white",
+                    }}
+                  >
                     <span>{msgBefore}</span>
-                    <span className="currency">
+                    <span
+                      className="currency"
+                      style={{ color: specialTextColor ?? "red" }}
+                    >
                       <span className="currency-format">{currencyFormat}</span>
                       <span className="currency-total">{freeShippingGoal}</span>
                     </span>
@@ -43,15 +67,24 @@ const Form = (props) => {
                 </div>
                 {/* processingBar01 */}
                 <div className="msg2Preview">
-                  <div className="preview-bar">
+                  <div
+                    className="preview-bar"
+                    style={{
+                      backgroundColor: backgroundColor ?? "black",
+                      color: textColor ?? "white",
+                    }}
+                  >
                     <span>
                       {progressMsgBefore}
-                      <span className="currency">
+                      <span
+                        className="currency"
+                        style={{ color: specialTextColor ?? "red" }}
+                      >
                         <span className="currency-format">
                           {currencyFormat}
                         </span>
                         <span className="currency-total">
-                          {freeShippingGoal - 1}
+                          {progressBarShippingGoal}
                         </span>
                       </span>
                       {progressMsgAfter}
@@ -60,7 +93,13 @@ const Form = (props) => {
                 </div>
                 {/* congratsBar */}
                 <div className="msg3Preview">
-                  <div className="preview-bar">
+                  <div
+                    className="preview-bar"
+                    style={{
+                      backgroundColor: backgroundColor ?? "black",
+                      color: textColor ?? "white",
+                    }}
+                  >
                     <span>{goalAchievedMsg}</span>
                   </div>
                 </div>
@@ -76,7 +115,12 @@ const Form = (props) => {
               pullData={(data) => pullData(data)}
             />
             <CurrencyConfiguration stepName={"CurrencyConfiguration"} />
-            <StyleConfiguration stepName={"StyleConfiguration"} />
+            <StyleConfiguration
+              stepName={"StyleConfiguration"}
+              stylePullData={(data) => {
+                stylePullData(data);
+              }}
+            />
             <TargetingConfiguration stepName={"targetingConfiguration"} />
           </StepWizard>
         </Card>

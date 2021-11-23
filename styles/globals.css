@@ -1,37 +1,104 @@
-a{
-    color:#007ace;
-    text-decoration: none;
+a {
+  color: #007ace;
+  text-decoration: none;
 }
-a:active, a:hover, a:visited {
-    color:#007ace;
+a:active,
+a:hover,
+a:visited {
+  color: #007ace;
 }
-a:hover{
-    text-decoration: underline;
+a:hover {
+  text-decoration: underline;
 }
 
 /*form section*/
-
-.lock-icon{
-    display: inline-block;
+.heading-div {
+  margin-bottom: 15px;
+  font-size: 2rem;
+}
+.lock-icon {
+  display: inline-block;
 }
 .preview-bar {
-    background: grey;
-    margin: 10px 0px ;
-    padding: 10px 0px;
-    display: flex;
-    justify-content: center;
-    font-size: 16px;
+  /* background: black; */
+  margin: 10px 0px;
+  padding: 10px 0px;
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  /* color:#fff; */
 }
-.preview-bar .currency{
-    margin-left: 5px;
-    margin-right: 5px;
-    color: aqua;
+.preview-bar .currency {
+  margin-left: 5px;
+  margin-right: 5px;
+  /* color: red; */
 }
-.preview-bar .currency .currency-format, .preview-bar .currency .currency-total{
-    margin-left: 2px;
-    margin-right: 2px;
-    font-size: 16px;
-    font-weight: 600;
+.preview-bar .currency .currency-format,
+.preview-bar .currency .currency-total {
+  margin-left: 2px;
+  margin-right: 2px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.upgrade-plan-div {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+.upgrade-plan-before-text {
+  margin-right: 5px;
+}
+.color-picker-div {
+  position: relative;
+}
+.color-label {
+  margin-bottom: 10px;
+}
+input[type="color"] {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  height: 45px;
+  padding: 0;
+  width: 50px;
+  margin-top: -5px;
+}
+.side-elements.color-picker {
+  position: relative;
+  display: flex;
+  margin-top: 10px;
+}
+.side-elements.color-picker input[type="color"] {
+  position: absolute;
+  z-index: 99;
+  margin-top: 20px;
+}
+.color-picker-div .Polaris-Connected__Item.Polaris-Connected__Item--primary {
+  margin-left: 50px;
+}
+.color-picker__preview {
+  background-color: transparent;
+  border: 0.1rem solid #c4cdd5;
+  border-radius: 0.3rem;
+  width: 50px;
+  height: 35px;
+  margin-right: 1px;
+}
+input#color-picker--background_color {
+  height: 35px;
+}
+input[type="file"] {
+  margin-top: 10px;
+  background: #596abd;
+  padding: 10px;
+  color: white;
+  font-size: 15px;
+}
+.Polaris-Thumbnail--sizeLarge {
+  width: 100px;
 }
 
 /*form section end*/

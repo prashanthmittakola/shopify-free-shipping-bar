@@ -17,9 +17,10 @@ import { LockMajor, LockMinor } from "@shopify/polaris-icons";
 import InputElement, {
   SelectBox,
   SingleChoiceList,
+  SingleCheckbox,
 } from "../../../common/inputElement";
+import UpgradePlanLockIcon from "../../../common/upgradePlanLockIcon";
 
-// work on SingleChoiceList tomorrow
 const ContentConfiguration = (props) => {
   const {
     pullData,
@@ -60,22 +61,39 @@ const ContentConfiguration = (props) => {
     { label: "OFF", value: "OFF" },
     { label: "ON", value: "ON" },
   ];
-  /* includeCloseButton */
-  const [includeCloseButton, setIncludeCloseButton] = useState("NO");
-  const includeCloseButtonHandler = useCallback(
-    (value) => setIncludeCloseButton(value),
+  const [openLinkInNewTab, setOpenLinkInNewTab] = useState(true);
+  const handleOpenLinkInNewTab = useCallback(
+    (newChecked) => setOpenLinkInNewTab(newChecked),
     []
   );
+
+  /* includeCloseButton */
+  const [includeCloseButton, setIncludeCloseButton] = useState("NO");
+  const includeCloseButtonHandler = useCallback((value) => {
+    setIncludeCloseButton(value);
+  }, []);
   const includeCloseButtonOptions = [
-    { label: "YES", value: "YES" },
     { label: "NO", value: "NO" },
+    { label: "YES", value: "YES" },
+  ];
+  /* single cholice list */
+  const [singleChoiceListSelected, setSingleChoiceListSelected] = useState([
+    "Top",
+  ]);
+  const handleSingleChoiceListChange = useCallback(
+    (value) => setSingleChoiceListSelected(value),
+    []
+  );
+  const singleChoiceListOptions = [
+    { label: "Top bar pushes down the rest of the page", value: "Top" },
+    { label: "Bottom bar overlaps bottom of the page", value: "Bottom" },
   ];
 
   useEffect(() => {
     /*
-        let url ="../../api/currency";
-        fetch(url).then(data=>data.json()).then(data=>console.log("hiiii",data));
-        */
+      let url ="../../api/currency";
+      fetch(url).then(data=>data.json()).then(data=>console.log("hiiii",data));
+    */
 
     pullData({
       currencyFormat,
@@ -140,6 +158,9 @@ const ContentConfiguration = (props) => {
             <p>Is Active: {isActive}</p> */}
       <FormLayout>
         <Layout.Section>
+          <div className="heading-div">
+            <Heading>Content Configuration</Heading>
+          </div>
           <InputElement
             label="Name"
             type="text"
@@ -168,17 +189,7 @@ const ContentConfiguration = (props) => {
           />
           <ButtonGroup>
             <Button disabled={true}>Add Secondary Goal</Button>
-            <span className="lock-icon">
-              <Icon source={LockMinor} color="base" />
-            </span>
-            <a
-              href="#"
-              onClick={() => {
-                return false;
-              }}
-            >
-              Upgrade
-            </a>
+            <UpgradePlanLockIcon />
           </ButtonGroup>
         </Layout.Section>
         {/* for first preview bar */}
@@ -219,7 +230,6 @@ const ContentConfiguration = (props) => {
               id="msgAfter"
               value={msgAfter}
               onChange={(value) => handleMsgAfterChange(value)}
-              helpText={<span>Display when cart is empty.</span>}
               placeholder=" "
             />
           </Layout.Section>
@@ -265,7 +275,6 @@ const ContentConfiguration = (props) => {
               id="progressMsgAfter"
               value={progressMsgAfter}
               onChange={(value) => handleProgressBarMsgAfterChange(value)}
-              helpText={<span>Display when cart is empty.</span>}
               placeholder=" "
             />
           </Layout.Section>
@@ -294,13 +303,34 @@ const ContentConfiguration = (props) => {
             <SelectBox
               label="Add Link to the Bar (optional):"
               id="AddLinkToBar"
-              value={addLinkToBar}
+              selected={addLinkToBar}
               options={addLinkToBarOptions}
               onChange={(value) => handleAddLinkBarChange(value)}
               helpText={
-                <span>Displays when cart value is less than the goal.</span>
+                <span>The bar will be clickable after adding a link.</span>
               }
             />
+            <InputElement
+              label="Link URL:"
+              type="text"
+              name="goalAchievedMsg"
+              id="goalAchievedMsg"
+              value={goalAchievedMsg}
+              onChange={(value) => handleGoalAchievedMsgChange(value)}
+              helpText={
+                <span>
+                  This address will be visited after clicking the bar.
+                </span>
+              }
+              placeholder="https://apps.shopify.com/partners/panthercodx"
+            />
+            {addLinkToBar == "ON" ? (
+              <SingleCheckbox
+                label="Open the link in a NEW tab when clicked"
+                onChange={handleOpenLinkInNewTab}
+                checked={openLinkInNewTab}
+              />
+            ) : null}
           </Layout.Section>
           <Layout.Section oneThird> </Layout.Section>
         </FormLayout.Group>
@@ -309,22 +339,34 @@ const ContentConfiguration = (props) => {
             <SelectBox
               label="Include Close Button:"
               id="includeCloseButton"
-              value={includeCloseButton}
               options={includeCloseButtonOptions}
-              onChange={(value) => includeCloseButtonHandler(value)}
+              onChange={includeCloseButtonHandler}
               helpText={
-                <span>Displays when cart value is less than the goal.</span>
+                <span>
+                  Places an "x" button on the bar so that users can close it
+                  manually.
+                </span>
               }
+              selected={includeCloseButton}
             />
           </Layout.Section>
           <Layout.Section oneThird> </Layout.Section>
         </FormLayout.Group>
+        <Layout.Section>
+          <SingleChoiceList
+            title="Select a Display Position:"
+            id="displayPosition"
+            choices={singleChoiceListOptions}
+            selected={singleChoiceListSelected}
+            onChange={handleSingleChoiceListChange}
+          />
+        </Layout.Section>
       </FormLayout>
 
       <Layout.Section>
         <div style={{ marginTop: "20px" }}>
           <ButtonGroup>
-            <Button onClick={() => previousStep()}>Previous Step</Button>
+            {/* <Button onClick={() => previousStep()}>Previous Step</Button> */}
             <Button onClick={() => nextStep()}>Next</Button>
           </ButtonGroup>
         </div>
