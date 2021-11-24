@@ -29,7 +29,7 @@ const StyleConfiguration = (props) => {
     stepName,
     totalSteps,
     transitions,
-    stylePullData,
+    pullStyleData,
   } = props;
 
   /*backgroundColor*/
@@ -51,7 +51,6 @@ const StyleConfiguration = (props) => {
   const [textColor, setTextColor] = useState("#ffffff");
   const [textColorTextBox, setTextColorTextBox] = useState(textColor);
   const textColorChangeHandler = (e) => {
-    // console.log("e", e.target.value);
     setTextColor(e.target.value);
     setTextColorTextBox(e.target.value);
   };
@@ -66,7 +65,6 @@ const StyleConfiguration = (props) => {
     specialTextColor
   );
   const specialTextColorChangeHandler = (e) => {
-    // console.log("e", e.target.value);
     setSpecialTextColor(e.target.value);
     setSpecialTextColorTextBox(e.target.value);
   };
@@ -82,8 +80,40 @@ const StyleConfiguration = (props) => {
     []
   );
 
+  /* fontSize */
+  const [fonstSize, setFontSize] = useState(16);
+  const fonstSizeChangeHandler = useCallback((value) => setFontSize(value), []);
+
+  /* barPadding */
+  const [barPadding, setBarPadding] = useState(10);
+  const barPaddingChangeHandler = useCallback(
+    (value) => setBarPadding(value),
+    []
+  );
+
+  /* disappearAfter */
+  const [disappearAfter, setDisappearAfter] = useState(0);
+  const disappearAfterChangeHandler = useCallback(
+    (value) => setDisappearAfter(value),
+    []
+  );
+
+  /* Delay Before Repeating: */
+  const [delayBeforeRepeating, setDelayBeforeRepeating] = useState(0);
+  const delayBeforeRepeatingChangeHandler = useCallback(
+    (value) => setDelayBeforeRepeating(value),
+    []
+  );
+
+  /* Time to Fade In/Out: */
+  const [timeToFadeInOut, setTimeToFadeInOut] = useState(0);
+  const timeToFadeInOutChangeHandler = useCallback(
+    (value) => setTimeToFadeInOut(value),
+    []
+  );
+
   useEffect(() => {
-    stylePullData({
+    pullStyleData({
       backgroundColor,
       textColor,
       specialTextColor,
@@ -104,18 +134,20 @@ const StyleConfiguration = (props) => {
             <p>Total Steps: {totalSteps}</p>
             <p>Is Active: {isActive}</p> */}
       <FormLayout>
-        <div className="heading-div">
-          <Heading>Style Configuration</Heading>
-        </div>
+        <FormLayout.Group>
+          <Layout.Section oneHalf>
+            <div className="heading-div">
+              <Heading>Style Configuration</Heading>
+            </div>
+          </Layout.Section>
+        </FormLayout.Group>
 
         <FormLayout.Group condensed>
           <Layout.Section oneThird>
             {/* <ColorPickerBox /> */}
             {/* backgroundColor */}
             <div className="color-picker-div">
-              {/* <label className="color-label">Background Color: </label> */}
-              <div class="side-elements color-picker">
-                {/* <div class="color-picker__preview"></div> */}
+              <div className="side-elements color-picker">
                 <input
                   type="color"
                   onChange={(e) => {
@@ -123,7 +155,6 @@ const StyleConfiguration = (props) => {
                   }}
                   value={backgroundColor}
                 />
-                {/* <input type="text" id="color-picker--background_color" /> */}
                 <InputElement
                   label="Background Color:"
                   type="text"
@@ -141,8 +172,7 @@ const StyleConfiguration = (props) => {
           <Layout.Section oneThird>
             {/* textColor */}
             <div className="color-picker-div">
-              {/* <label className="color-label">Text Color: </label> */}
-              <div class="side-elements color-picker">
+              <div className="side-elements color-picker">
                 <input
                   type="color"
                   onChange={(e) => {
@@ -150,7 +180,6 @@ const StyleConfiguration = (props) => {
                   }}
                   value={textColor}
                 />
-                {/* <input type="text" id="color-picker--text_color" /> */}
                 <InputElement
                   label="Text Color:"
                   type="text"
@@ -166,8 +195,7 @@ const StyleConfiguration = (props) => {
           <Layout.Section oneThird>
             {/* special text color */}
             <div className="color-picker-div">
-              {/* <label className="color-label">Special Text Color: </label> */}
-              <div class="side-elements color-picker">
+              <div className="side-elements color-picker">
                 <input
                   type="color"
                   onChange={(e) => {
@@ -175,7 +203,6 @@ const StyleConfiguration = (props) => {
                   }}
                   value={specialTextColor}
                 />
-                {/* <input type="text" id="color-picker--special_text_color" /> */}
                 <InputElement
                   label="Special Text Color:"
                   type="text"
@@ -232,6 +259,7 @@ const StyleConfiguration = (props) => {
             </div>
           </Layout.Section>
         </FormLayout.Group>
+
         <FormLayout.Group>
           <Layout.Section>
             <UpgradePlanLockIcon beforeText={"Upload Background Image:"} />
@@ -253,8 +281,8 @@ const StyleConfiguration = (props) => {
               type="number"
               name="font Size"
               id="Name"
-              value={16}
-              onChange={(value) => console.log("HIII", value)}
+              value={fonstSize}
+              onChange={(value) => fonstSizeChangeHandler(value)}
               helpText={
                 <span>
                   Bar height is determined by Font Size and Bar Padding.
@@ -273,8 +301,8 @@ const StyleConfiguration = (props) => {
               type="number"
               name="Bar Padding"
               id="barPadding"
-              value={12}
-              onChange={(value) => console.log("HIII", value)}
+              value={barPadding}
+              onChange={(value) => barPaddingChangeHandler(value)}
               helpText={
                 <span>Space between the text and the upper/lower borders.</span>
               }
@@ -291,8 +319,8 @@ const StyleConfiguration = (props) => {
               type="number"
               name="Disappear After"
               id="disappearAfter"
-              value={0}
-              onChange={(value) => console.log("HIII", value)}
+              value={disappearAfter}
+              onChange={(value) => disappearAfterChangeHandler(value)}
               helpText={<span>Bar will not disappear if set to 0.</span>}
               connectedRight={<Button>Seconds</Button>}
             />
@@ -307,8 +335,8 @@ const StyleConfiguration = (props) => {
               type="number"
               name="Delay Before Repeating"
               id="delayBeforeRepeating"
-              value={0}
-              onChange={(value) => console.log("HIII", value)}
+              value={delayBeforeRepeating}
+              onChange={(value) => delayBeforeRepeatingChangeHandler(value)}
               helpText={
                 <span>
                   Wait this many seconds to show Free Shipping Bar again (unless
@@ -328,8 +356,8 @@ const StyleConfiguration = (props) => {
               type="number"
               name="Time to Fade In/Out"
               id="timetoFadeInOut"
-              value={0}
-              onChange={(value) => console.log("HIII", value)}
+              value={timeToFadeInOut}
+              onChange={(value) => timeToFadeInOutChangeHandler(value)}
               helpText={<span>Bar will not fade if set to 0.</span>}
               connectedRight={<Button>Seconds</Button>}
             />

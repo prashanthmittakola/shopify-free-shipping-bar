@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ButtonGroup, Button } from "@shopify/polaris";
 import data from "./fontButtons.json";
 
-const fontButtons = () => {
+const Index = () => {
   const [active, setActive] = useState(true);
   const [clickedBtnIndex, setClickedBtnIndex] = useState(0);
   const btnClickHandler = (i, index) => {
@@ -15,6 +15,7 @@ const fontButtons = () => {
       {data.map((i, index) => {
         return (
           <Button
+            key={i + index}
             onClick={() => btnClickHandler(i, index)}
             primary={clickedBtnIndex === index ? true : false}
           >
@@ -26,4 +27,4 @@ const fontButtons = () => {
   );
 };
 
-export default fontButtons;
+export default Index;

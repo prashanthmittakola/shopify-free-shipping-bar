@@ -5,6 +5,7 @@ import ContentConfiguration from "./formSteps/step1";
 import CurrencyConfiguration from "./formSteps/step2";
 import StyleConfiguration from "./formSteps/step3";
 import TargetingConfiguration from "./formSteps/step4";
+import CustomCodeConfiguration from "./formSteps/step5";
 
 const Form = (props) => {
   const [previewBarData, setPreviewBarData] = useState({});
@@ -29,11 +30,23 @@ const Form = (props) => {
 
   const progressBarShippingGoal =
     freeShippingGoal == undefined ? Math.random() * 200 : freeShippingGoal - 1;
-  const pullData = (data) => {
+
+  const pullContentData = (data) => {
     setPreviewBarData(data);
   };
-  const stylePullData = (data) => {
+  const pullStyleData = (data) => {
     setBarStyle(data);
+  };
+
+  /* currencyData */
+  const [currencyData, setCurrencyData] = useState({});
+  const {
+    currencyValue,
+    currencySymbol,
+    currencySymbolPosition,
+  } = currencyData;
+  const pullCurrencyData = (data) => {
+    setCurrencyData(data);
   };
 
   return (
@@ -59,7 +72,9 @@ const Form = (props) => {
                       className="currency"
                       style={{ color: specialTextColor ?? "red" }}
                     >
-                      <span className="currency-format">{currencyFormat}</span>
+                      <span className="currency-format">
+                        {currencySymbol ?? currencyFormat}
+                      </span>
                       <span className="currency-total">{freeShippingGoal}</span>
                     </span>
                     <span>{msgAfter}</span>
@@ -81,7 +96,7 @@ const Form = (props) => {
                         style={{ color: specialTextColor ?? "red" }}
                       >
                         <span className="currency-format">
-                          {currencyFormat}
+                          {currencySymbol ?? currencyFormat}
                         </span>
                         <span className="currency-total">
                           {progressBarShippingGoal}
@@ -109,20 +124,26 @@ const Form = (props) => {
         </Card>
         {/* preview section end */}
         <Card sectioned subdued>
-          <StepWizard>
-            <ContentConfiguration
-              stepName={"ContentConfiguration"}
-              pullData={(data) => pullData(data)}
-            />
-            <CurrencyConfiguration stepName={"CurrencyConfiguration"} />
-            <StyleConfiguration
-              stepName={"StyleConfiguration"}
-              stylePullData={(data) => {
-                stylePullData(data);
-              }}
-            />
-            <TargetingConfiguration stepName={"targetingConfiguration"} />
-          </StepWizard>
+          <div className="card-min-height-500">
+            <StepWizard>
+              <ContentConfiguration
+                stepName={"ContentConfiguration"}
+                pullContentData={(data) => pullContentData(data)}
+              />
+              <CurrencyConfiguration
+                stepName={"CurrencyConfiguration"}
+                pullCurrencyData={(data) => pullCurrencyData(data)}
+              />
+              <StyleConfiguration
+                stepName={"StyleConfiguration"}
+                pullStyleData={(data) => {
+                  pullStyleData(data);
+                }}
+              />
+              <TargetingConfiguration stepName={"targetingConfiguration"} />
+              <CustomCodeConfiguration stepName={"targetingConfiguration"} />
+            </StepWizard>
+          </div>
         </Card>
       </Frame>
     </section>

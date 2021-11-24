@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Button,
   ButtonGroup,
@@ -12,6 +12,7 @@ import UpgradePlanLockIcon from "../../../common/upgradePlanLockIcon";
 
 const CurrencyConfiguration = (props) => {
   const {
+    pullCurrencyData,
     currentStep,
     firstStep,
     goToStep,
@@ -58,6 +59,15 @@ const CurrencyConfiguration = (props) => {
     setAutoCurrencyConversion(value);
   }, []);
 
+  useEffect(() => {
+    pullCurrencyData({ currencyValue, currencySymbol, currencySymbolPosition });
+    /*
+    return () => {
+      cleanup
+    }
+    */
+  }, [currencyValue, currencySymbol, currencySymbolPosition]);
+
   return (
     <div>
       {/* <h3>Contact Info</h3>
@@ -72,6 +82,10 @@ const CurrencyConfiguration = (props) => {
             <div className="heading-div">
               <Heading>Currency Configuration</Heading>
             </div>
+          </Layout.Section>
+        </FormLayout.Group>
+        <FormLayout.Group>
+          <Layout.Section oneHalf>
             <SelectBox
               label="Currency:"
               id="currencySelectBox"

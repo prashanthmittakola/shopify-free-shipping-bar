@@ -1,11 +1,11 @@
 a {
-  color: #007ace;
+  color: #2c6ecb;
   text-decoration: none;
 }
 a:active,
 a:hover,
 a:visited {
-  color: #007ace;
+  color: #2c6ecb;
 }
 a:hover {
   text-decoration: underline;
@@ -47,6 +47,7 @@ a:hover {
 }
 .upgrade-plan-before-text {
   margin-right: 5px;
+  color: #6d7175;
 }
 .color-picker-div {
   position: relative;
@@ -100,5 +101,20 @@ input[type="file"] {
 .Polaris-Thumbnail--sizeLarge {
   width: 100px;
 }
-
+.p-relative {
+  position: relative;
+  margin-top: 20px;
+}
+.p-absolute {
+  position: absolute;
+}
+.card-min-height-500 {
+  min-height: 500px;
+}
+textarea {
+  font-size: 16px;
+}
+#customCodeConfiguration {
+  height: 250px !important;
+}
 /*form section end*/

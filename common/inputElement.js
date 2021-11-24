@@ -73,7 +73,14 @@ const RangeSliderWithControl = (props) => {
   );
 };
 
-const SingleChoiceList = ({ title, choices, selected, onChange, id }) => {
+const SingleChoiceList = ({
+  title,
+  choices,
+  selected,
+  onChange,
+  id,
+  disabled,
+}) => {
   return (
     <ChoiceList
       title={title}
@@ -81,9 +88,11 @@ const SingleChoiceList = ({ title, choices, selected, onChange, id }) => {
       choices={choices}
       selected={selected}
       onChange={onChange}
+      disabled={disabled}
     />
   );
 };
+
 const SingleCheckbox = ({ checked, onChange, label }) => {
   return <Checkbox label={label} checked={checked} onChange={onChange} />;
 };
@@ -101,27 +110,29 @@ const InputElement = ({
   disabled,
   placeholder,
   connectedRight,
+  autoComplete,
+  multiline,
 }) => {
   return (
-    <>
-      <TextField
-        label={label}
-        type={type}
-        name={name}
-        id={id}
-        value={value.toString()}
-        onChange={onChange}
-        placeholder={
-          !placeholder ? `Enter ${label ? label : "value"}` : placeholder
-        }
-        style={style}
-        error={error}
-        helpText={helpText}
-        disabled={disabled}
-        min={type == "number" ? 0 : null}
-        connectedRight={connectedRight}
-      />
-    </>
+    <TextField
+      label={label}
+      type={type}
+      name={name}
+      id={id}
+      value={value.toString()}
+      onChange={onChange}
+      placeholder={
+        !placeholder ? `Enter ${label ? label : "value"}` : placeholder
+      }
+      autoComplete={autoComplete}
+      multiline={multiline}
+      style={style}
+      error={error}
+      helpText={helpText}
+      disabled={disabled}
+      min={type == "number" ? 0 : null}
+      connectedRight={connectedRight}
+    />
   );
 };
 

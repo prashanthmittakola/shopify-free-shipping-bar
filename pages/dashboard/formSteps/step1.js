@@ -23,7 +23,7 @@ import UpgradePlanLockIcon from "../../../common/upgradePlanLockIcon";
 
 const ContentConfiguration = (props) => {
   const {
-    pullData,
+    pullContentData,
     currentStep,
     firstStep,
     goToStep,
@@ -37,7 +37,7 @@ const ContentConfiguration = (props) => {
     transitions,
   } = props;
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState("My first shipping bar");
   const [currencyFormat, setCurrencyFormat] = useState("INR");
   const [freeShippingGoal, setFreeShippingGoal] = useState(100);
   const [msgBefore, setMsgBefore] = useState("Free shipping for orders over");
@@ -95,7 +95,7 @@ const ContentConfiguration = (props) => {
       fetch(url).then(data=>data.json()).then(data=>console.log("hiiii",data));
     */
 
-    pullData({
+    pullContentData({
       currencyFormat,
       freeShippingGoal,
       msgBefore,
@@ -119,7 +119,7 @@ const ContentConfiguration = (props) => {
     goalAchievedMsg,
   ]);
 
-  // pullData({ currencyFormat, freeShippingGoal, msgBefore, msgAfter });
+  // pullContentData({ currencyFormat, freeShippingGoal, msgBefore, msgAfter });
 
   const handleNameChange = useCallback((newValue) => {
     setName(newValue);
@@ -157,10 +157,14 @@ const ContentConfiguration = (props) => {
             <p>Total Steps: {totalSteps}</p>
             <p>Is Active: {isActive}</p> */}
       <FormLayout>
+        <FormLayout.Group>
+          <Layout.Section oneHalf>
+            <div className="heading-div">
+              <Heading>Content Configuration</Heading>
+            </div>
+          </Layout.Section>
+        </FormLayout.Group>
         <Layout.Section>
-          <div className="heading-div">
-            <Heading>Content Configuration</Heading>
-          </div>
           <InputElement
             label="Name"
             type="text"
