@@ -52,14 +52,15 @@ const ContentConfiguration = (props) => {
   );
 
   /* addLinkToBar */
-  const [addLinkToBar, setAddLinkToBar] = useState("OFF");
-  const handleAddLinkBarChange = useCallback(
-    (value) => setAddLinkToBar(value),
-    []
-  );
+  const [addLinkToBar, setAddLinkToBar] = useState("false");
+  const [linkUrl, setLinkUrl] = useState("");
+  const handleBarLinkChange = useCallback((value) => setLinkUrl(value), []);
+  const handleAddLinkBarChange = useCallback((value) => {
+    setAddLinkToBar(value);
+  }, []);
   const addLinkToBarOptions = [
-    { label: "OFF", value: "OFF" },
-    { label: "ON", value: "ON" },
+    { label: "OFF", value: "false" },
+    { label: "ON", value: "true" },
   ];
   const [openLinkInNewTab, setOpenLinkInNewTab] = useState(true);
   const handleOpenLinkInNewTab = useCallback(
@@ -68,58 +69,70 @@ const ContentConfiguration = (props) => {
   );
 
   /* includeCloseButton */
-  const [includeCloseButton, setIncludeCloseButton] = useState("NO");
+  const [includeCloseButton, setIncludeCloseButton] = useState("false");
   const includeCloseButtonHandler = useCallback((value) => {
     setIncludeCloseButton(value);
   }, []);
   const includeCloseButtonOptions = [
-    { label: "NO", value: "NO" },
-    { label: "YES", value: "YES" },
+    { label: "NO", value: "false" },
+    { label: "YES", value: "true" },
   ];
   /* single cholice list */
-  const [singleChoiceListSelected, setSingleChoiceListSelected] = useState([
+  const [displayPositionSelected, setDisplayPositionSelected] = useState([
     "Top",
   ]);
-  const handleSingleChoiceListChange = useCallback(
-    (value) => setSingleChoiceListSelected(value),
+  const displayPositionChangeHandler = useCallback(
+    (value) => setDisplayPositionSelected(value),
     []
   );
-  const singleChoiceListOptions = [
+  const displayPositionOptions = [
     { label: "Top bar pushes down the rest of the page", value: "Top" },
     { label: "Bottom bar overlaps bottom of the page", value: "Bottom" },
   ];
 
   useEffect(() => {
-    /*
-      let url ="../../api/currency";
-      fetch(url).then(data=>data.json()).then(data=>console.log("hiiii",data));
-    */
+    let addLinkToBarData = {
+      addLinkToBar,
+    };
+    let displayPosition = displayPositionSelected.find((selected) => selected);
+    addLinkToBar == "true" ? (addLinkToBarData["linkUrl"] = linkUrl) : null;
+    addLinkToBar == "true"
+      ? (addLinkToBarData["openLinkInNewTab"] = openLinkInNewTab)
+      : null;
 
     pullContentData({
-      currencyFormat,
+      barName: name,
+      // currencyFormat,
       freeShippingGoal,
       msgBefore,
       msgAfter,
       progressMsgBefore,
       progressMsgAfter,
       goalAchievedMsg,
+      addLinkToBarData,
+      includeCloseButton,
+      displayPosition,
     });
     /*
-        return () => {
-            // cleanup
-        }
-        */
+      return () => {
+          // cleanup
+      }
+    */
   }, [
-    currencyFormat,
+    name,
+    // currencyFormat,
     freeShippingGoal,
     msgBefore,
     msgAfter,
     progressMsgBefore,
     progressMsgAfter,
     goalAchievedMsg,
+    addLinkToBar,
+    linkUrl,
+    openLinkInNewTab,
+    includeCloseButton,
+    displayPositionSelected,
   ]);
-
-  // pullContentData({ currencyFormat, freeShippingGoal, msgBefore, msgAfter });
 
   const handleNameChange = useCallback((newValue) => {
     setName(newValue);
@@ -164,50 +177,59 @@ const ContentConfiguration = (props) => {
             </div>
           </Layout.Section>
         </FormLayout.Group>
-        <Layout.Section>
-          <InputElement
-            label="Name"
-            type="text"
-            name="name"
-            id="Name"
-            value={name}
-            onChange={(value) => handleNameChange(value)}
-            helpText={
-              <span>
-                For your own internal reference - only you can see it.
-              </span>
-            }
-          />
-          <InputElement
-            label="Free Shipping Goal:"
-            type="number"
-            name="name"
-            id="Name"
-            value={freeShippingGoal}
-            onChange={(value) => handleFreeShippingGoalChange(value)}
-            helpText={
-              <span>
-                If no minimum order value is required, please set goal to 0.
-              </span>
-            }
-          />
-          <ButtonGroup>
-            <Button disabled={true}>Add Secondary Goal</Button>
-            <UpgradePlanLockIcon />
-          </ButtonGroup>
-        </Layout.Section>
-        {/* for first preview bar */}
         <FormLayout.Group>
-          <Layout.Section oneThird>
+          <Layout.Section oneHalf>
             <InputElement
-              label="Initial Message :: Before money:"
+              label="Name"
+              type="text"
+              name="name"
+              id="Name"
+              value={name}
+              onChange={(value) => handleNameChange(value)}
+              helpText={
+                <span>
+                  For your own internal reference - only you can see it.
+                </span>
+              }
+            />
+          </Layout.Section>
+          <Layout.Section oneHalf></Layout.Section>
+        </FormLayout.Group>
+        <FormLayout.Group>
+          <Layout.Section oneHalf>
+            <InputElement
+              label="Free Shipping Goal:"
+              type="number"
+              name="name"
+              id="Name"
+              value={freeShippingGoal}
+              onChange={(value) => handleFreeShippingGoalChange(value)}
+              helpText={
+                <span>
+                  If no minimum order value is required, please set goal to 0.
+                </span>
+              }
+              min={0}
+            />
+            <ButtonGroup>
+              <Button disabled={true}>Add Secondary Goal</Button>
+              <UpgradePlanLockIcon />
+            </ButtonGroup>
+          </Layout.Section>
+          <Layout.Section oneHalf></Layout.Section>
+        </FormLayout.Group>
+
+        {/* for first preview bar */}
+        <FormLayout.Group condensed>
+          <Layout.Section oneHalf>
+            <InputElement
+              label="Initial Message:"
               type="text"
               name="msgBefore"
               id="msgBefore"
               value={msgBefore}
               onChange={(value) => handleMsgBeforeChange(value)}
               helpText={<span>Display when cart is empty.</span>}
-              placeholder=" "
             />
           </Layout.Section>
           <Layout.Section oneThird>
@@ -234,55 +256,54 @@ const ContentConfiguration = (props) => {
               id="msgAfter"
               value={msgAfter}
               onChange={(value) => handleMsgAfterChange(value)}
-              placeholder=" "
             />
           </Layout.Section>
         </FormLayout.Group>
 
         {/* for second preview bar */}
-        <FormLayout.Group>
-          <Layout.Section oneThird>
-            <InputElement
-              label="Progress Message:"
-              type="text"
-              name="progressMsgBefore"
-              id="progressMsgBefore"
-              value={progressMsgBefore}
-              onChange={(value) => handleProgressBarMsgBeforeChange(value)}
-              helpText={
-                <span>Displays when cart value is less than the goal.</span>
-              }
-              placeholder=" "
-            />
-          </Layout.Section>
-          <Layout.Section oneThird>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                minWidth: "100px",
-                margin: "0 auto",
-              }}
-            >
-              <label className="Polaris-Label__Text">Amount:</label>
-              <Heading>
-                {currencyFormat} {freeShippingGoal - 1}
-              </Heading>
-            </div>
-          </Layout.Section>
-          <Layout.Section oneThird>
-            <InputElement
-              label="After money:"
-              type="text"
-              name="progressMsgAfter"
-              id="progressMsgAfter"
-              value={progressMsgAfter}
-              onChange={(value) => handleProgressBarMsgAfterChange(value)}
-              placeholder=" "
-            />
-          </Layout.Section>
-        </FormLayout.Group>
+        {freeShippingGoal > 0 ? (
+          <FormLayout.Group>
+            <Layout.Section oneThird>
+              <InputElement
+                label="Progress Message:"
+                type="text"
+                name="progressMsgBefore"
+                id="progressMsgBefore"
+                value={progressMsgBefore}
+                onChange={(value) => handleProgressBarMsgBeforeChange(value)}
+                helpText={
+                  <span>Displays when cart value is less than the goal.</span>
+                }
+              />
+            </Layout.Section>
+            <Layout.Section oneThird>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  minWidth: "100px",
+                  margin: "0 auto",
+                }}
+              >
+                <label className="Polaris-Label__Text">Amount:</label>
+                <Heading>
+                  {currencyFormat} {freeShippingGoal - 1}
+                </Heading>
+              </div>
+            </Layout.Section>
+            <Layout.Section oneThird>
+              <InputElement
+                label="After money:"
+                type="text"
+                name="progressMsgAfter"
+                id="progressMsgAfter"
+                value={progressMsgAfter}
+                onChange={(value) => handleProgressBarMsgAfterChange(value)}
+              />
+            </Layout.Section>
+          </FormLayout.Group>
+        ) : null}
 
         {/* for third preview bar */}
         <FormLayout.Group>
@@ -297,7 +318,6 @@ const ContentConfiguration = (props) => {
               helpText={
                 <span>Displays when cart value is greater than goal.</span>
               }
-              placeholder=" "
             />
           </Layout.Section>
           <Layout.Section oneThird> </Layout.Section>
@@ -314,26 +334,28 @@ const ContentConfiguration = (props) => {
                 <span>The bar will be clickable after adding a link.</span>
               }
             />
-            <InputElement
-              label="Link URL:"
-              type="text"
-              name="goalAchievedMsg"
-              id="goalAchievedMsg"
-              value={goalAchievedMsg}
-              onChange={(value) => handleGoalAchievedMsgChange(value)}
-              helpText={
-                <span>
-                  This address will be visited after clicking the bar.
-                </span>
-              }
-              placeholder="https://apps.shopify.com/partners/panthercodx"
-            />
-            {addLinkToBar == "ON" ? (
-              <SingleCheckbox
-                label="Open the link in a NEW tab when clicked"
-                onChange={handleOpenLinkInNewTab}
-                checked={openLinkInNewTab}
-              />
+            {addLinkToBar == "true" ? (
+              <>
+                <InputElement
+                  label="Link URL:"
+                  type="text"
+                  name="LinkUrl"
+                  id="linkUrl"
+                  value={linkUrl}
+                  onChange={(value) => handleBarLinkChange(value)}
+                  helpText={
+                    <span>
+                      This address will be visited after clicking the bar.
+                    </span>
+                  }
+                  placeholder="https://apps.shopify.com/partners/panthercodx"
+                />
+                <SingleCheckbox
+                  label="Open the link in a NEW tab when clicked"
+                  onChange={handleOpenLinkInNewTab}
+                  checked={openLinkInNewTab}
+                />
+              </>
             ) : null}
           </Layout.Section>
           <Layout.Section oneThird> </Layout.Section>
@@ -360,9 +382,9 @@ const ContentConfiguration = (props) => {
           <SingleChoiceList
             title="Select a Display Position:"
             id="displayPosition"
-            choices={singleChoiceListOptions}
-            selected={singleChoiceListSelected}
-            onChange={handleSingleChoiceListChange}
+            choices={displayPositionOptions}
+            selected={displayPositionSelected}
+            onChange={displayPositionChangeHandler}
           />
         </Layout.Section>
       </FormLayout>

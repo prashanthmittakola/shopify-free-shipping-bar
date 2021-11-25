@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   ButtonGroup,
   Button,
@@ -25,6 +25,7 @@ const TargetingConfiguration = (props) => {
     stepName,
     totalSteps,
     transitions,
+    pullTargetingData,
   } = props;
   // console.log("targetingConfiguration", props);
 
@@ -123,9 +124,11 @@ const TargetingConfiguration = (props) => {
   );
 
   /* Display Schedule: */
-  const [displaySchedule, setDisplaySchedule] = useState(["all"]);
+  const [displayScheduleSelected, setDisplayScheduleSelected] = useState([
+    "all",
+  ]);
   const displayScheduleChangeHandler = useCallback(
-    (value) => setDisplaySchedule(value),
+    (value) => setDisplayScheduleSelected(value),
     []
   );
   const displayScheduleChoices = [
@@ -138,6 +141,37 @@ const TargetingConfiguration = (props) => {
       value: "no",
     },
   ];
+
+  useEffect(() => {
+    let deviceTarget = deviceTargetSelected.find((selected) => selected);
+    let productTarget = productTargeting.find((selected) => selected);
+    let customerTarget = customerTargeting.find((selected) => selected);
+    let displaySchedule = displayScheduleSelected.find((selected) => selected);
+    pullTargetingData({
+      displayOnPageData,
+      excludePageData,
+      deviceTarget,
+      productTarget,
+      customerTarget,
+      geoLocationTarget,
+      excludeGeoLocation,
+      displaySchedule,
+    });
+    /*
+    return () => {
+      cleanup
+    }
+    */
+  }, [
+    displayOnPageData,
+    excludePageData,
+    deviceTargetSelected,
+    productTargeting,
+    customerTargeting,
+    geoLocationTarget,
+    excludeGeoLocation,
+    displayScheduleSelected,
+  ]);
 
   return (
     <div style={{ minHeight: "350px" }}>
@@ -269,7 +303,7 @@ const TargetingConfiguration = (props) => {
               }
               id={"displaySchedule"}
               choices={displayScheduleChoices}
-              selected={displaySchedule}
+              selected={displayScheduleSelected}
               onChange={(value) => displayScheduleChangeHandler(value)}
               disabled={true}
             />

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   ButtonGroup,
   Button,
@@ -29,6 +29,7 @@ const CustomCodeConfiguration = (props) => {
     stepName,
     totalSteps,
     transitions,
+    pullCustomCodeData,
   } = props;
 
   /*Toast*/
@@ -45,6 +46,15 @@ const CustomCodeConfiguration = (props) => {
     (newValue) => setCustomCodeText(newValue),
     []
   );
+
+  useEffect(() => {
+    pullCustomCodeData({ customCodeText });
+    /*
+    return () => {
+      cleanup
+    }
+    */
+  }, [customCodeText]);
 
   return (
     <div style={{ minHeight: "500px" }}>
@@ -127,6 +137,7 @@ const CustomCodeConfiguration = (props) => {
             <ButtonGroup>
               <Button onClick={() => previousStep()}>Previous Step</Button>
               <Button onClick={() => toggleActive()}>Finish</Button>
+              <Button submit>submit</Button>
             </ButtonGroup>
           </Layout.Section>
         </FormLayout.Group>

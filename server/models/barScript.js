@@ -12,22 +12,8 @@ const Schema = mongoose.Schema;
  * Free Shipping Bar Schema
  */
 
-const BarStyleSchema = new Schema({
-  backgroundColor: {
-    type: String,
-    trim: true,
-    default: "#7e7e7e",
-    maxlength: 10,
-  },
-  textColor: { type: String, trim: true, default: "#fff", maxlength: 10 },
-  specialTextColor: { type: String, trim: true, default: "red", maxlength: 10 },
-  backgroundOpacity: { type: Number, trim: true, default: 1, maxlength: 5 },
-  fontFamily: { type: String, trim: true, default: "Roboto", maxlength: 20 },
-  fontSize: { type: Number, trim: true, default: 16, maxlength: 5 },
-  barPadding: { type: Number, trim: true, default: 12, maxlength: 5 },
-  disappearAfter: { type: Number, trim: true, default: 0, maxlength: 5 },
-  delayBeforeRepeating: { type: Number, trim: true, default: 0, maxlength: 5 },
-  timeToFadeInOut: { type: Number, trim: true, default: 0, maxlength: 5 },
+const BarScriptSchema = new Schema({
+  customCodeText: { type: String, trim: true, default: "" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   bar: { type: Schema.ObjectId, ref: "Bar" },
@@ -38,15 +24,9 @@ const BarStyleSchema = new Schema({
  * Pre-remove hook
  */
 
-BarStyleSchema.pre("remove", function (next) {
+BarScriptSchema.pre("remove", function (next) {
   // const imager = new Imager(imagerConfig, 'S3');
   // const files = this.image.files;
-
-  // if there are files associated with the item, remove from the cloud too
-  // imager.remove(files, function (err) {
-  //   if (err) return next(err);
-  // }, 'metafield');
-
   next();
 });
 
@@ -54,7 +34,7 @@ BarStyleSchema.pre("remove", function (next) {
  * Methods
  */
 
-BarStyleSchema.methods = {
+BarScriptSchema.methods = {
   /**
    * Save metafield and upload image
    *
@@ -86,7 +66,7 @@ BarStyleSchema.methods = {
  * Statics
  */
 
-BarStyleSchema.statics = {
+BarScriptSchema.statics = {
   load: function (_id) {
     return this.findOne({ _id }).exec();
   },
@@ -102,8 +82,7 @@ BarStyleSchema.statics = {
       .exec();
   },
 };
+BarScriptSchema.set("timestamps", true);
+const BarScript = mongoose.model("BarScript", BarScriptSchema);
 
-BarStyleSchema.set("timestamps", true);
-const BarStyle = mongoose.model("BarStyle", BarStyleSchema);
-
-module.exports = BarStyle;
+module.exports = BarScript;

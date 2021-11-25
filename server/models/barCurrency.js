@@ -13,19 +13,25 @@ const Schema = mongoose.Schema;
  */
 
 const BarCurrencySchema = new Schema({
-    currency: { type: String, default: "", trim: true, maxlength: 100 },
-    currencySymbolPosition: { type: String, default: "before the amount", trim: true, maxlength: 100 },
-    bar: { type: Schema.ObjectId, ref: "Bar" },
-    user: { type: Schema.ObjectId, ref: "User" },
+  currencyValue: { type: String, default: "", trim: true, maxlength: 30 },
+  currencySymbol: { type: String, default: "", trim: true, maxlength: 10 },
+  currencySymbolPosition: {
+    type: String,
+    default: "before",
+    trim: true,
+    maxlength: 10,
+  },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  bar: { type: Schema.ObjectId, ref: "Bar" },
+  user: { type: Schema.ObjectId, ref: "User" },
 });
-
-
 
 /**
  * Pre-remove hook
  */
 
- BarCurrencySchema.pre("remove", function (next) {
+BarCurrencySchema.pre("remove", function (next) {
   // const imager = new Imager(imagerConfig, 'S3');
   // const files = this.image.files;
 
@@ -41,7 +47,7 @@ const BarCurrencySchema = new Schema({
  * Methods
  */
 
- BarCurrencySchema.methods = {
+BarCurrencySchema.methods = {
   /**
    * Save metafield and upload image
    *
@@ -73,29 +79,24 @@ const BarCurrencySchema = new Schema({
  * Statics
  */
 
- BarCurrencySchema.statics = {
-  
+BarCurrencySchema.statics = {
   load: function (_id) {
-    return (
-      this.findOne({ _id })
-        .exec()
-    );
+    return this.findOne({ _id }).exec();
   },
 
   list: function (options) {
     const criteria = options.criteria || {};
     const page = options.page || 0;
     const limit = options.limit || 30;
-    return (
-      this.find(criteria)        
-        .sort({ createdAt: -1 })
-        .limit(limit)
-        .skip(limit * page)
-        .exec()
-    );
+    return this.find(criteria)
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(limit * page)
+      .exec();
   },
 };
 
+BarCurrencySchema.set("timestamps", true);
 const BarCurrency = mongoose.model("BarCurrency", BarCurrencySchema);
 
 module.exports = BarCurrency;

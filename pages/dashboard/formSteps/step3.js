@@ -112,19 +112,43 @@ const StyleConfiguration = (props) => {
     []
   );
 
+  /* fontFamily */
+  const [fontFamily, setFontFamily] = useState("Lato");
+  const pullFontStyle = useCallback(
+    ({ fontFamily }) => setFontFamily(fontFamily),
+    []
+  );
+
   useEffect(() => {
     pullStyleData({
       backgroundColor,
       textColor,
       specialTextColor,
       backgroundOpacity,
+      fontFamily,
+      fonstSize,
+      barPadding,
+      disappearAfter,
+      delayBeforeRepeating,
+      timeToFadeInOut,
     });
     /*
     return () => {
       cleanup
     }
     */
-  }, [backgroundColor, textColor, specialTextColor, backgroundOpacity]);
+  }, [
+    backgroundColor,
+    textColor,
+    specialTextColor,
+    backgroundOpacity,
+    fontFamily,
+    fonstSize,
+    barPadding,
+    disappearAfter,
+    delayBeforeRepeating,
+    timeToFadeInOut,
+  ]);
 
   // console.log("StyleConfiguration", props);
   return (
@@ -270,7 +294,7 @@ const StyleConfiguration = (props) => {
         <FormLayout.Group>
           <Layout.Section>
             <label>Fonts:</label>
-            <FontButtons />
+            <FontButtons pullFontStyle={(data) => pullFontStyle(data)} />
           </Layout.Section>
         </FormLayout.Group>
 

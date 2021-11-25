@@ -13,24 +13,40 @@ const Schema = mongoose.Schema;
  */
 
 const BarTargetingSchema = new Schema({
-    bgColor: {type: String, trim:true, default:"#7e7e7e", maxlength: 10},
-    textColor: {type: String, trim:true, default:"#fff", maxlength: 10},
-    specialTextColor: {type: String, trim:true, default:"red", maxlength: 10},
-    bgOpacity: {type: Number, trim:true, default:1, maxlength: 5},
-    fontFamily:  {type: String, trim:true, default:"Roboto", maxlength: 20},
-    fontSize:  {type: Number, trim:true, default:16, maxlength: 5},
-    barPadding:  {type: Number, trim:true, default:10, maxlength: 5},
-    bar:  { type: Schema.ObjectId, ref: "Bar" },
-    user: { type: Schema.ObjectId, ref: "User" },
+  displayOnPage: {
+    type: Schema.Types.Mixed,
+    trim: true,
+    default: "all",
+    maxlength: 10,
+  },
+  excludeOnPage: {
+    type: Schema.Types.Mixed,
+    trim: true,
+    default: "all",
+    maxlength: 10,
+  },
+  deviceTarget: {
+    type: Schema.Types.Mixed,
+    trim: true,
+    default: "all",
+    maxlength: 10,
+  },
+  productTarget: { type: Schema.Types.Mixed, trim: true, default: "all" },
+  customerTarget: { type: Schema.Types.Mixed, trim: true, default: "all" },
+  geoLocationTarget: { type: Schema.Types.Mixed, trim: true, default: "all" },
+  excludeGeoLocation: { type: Schema.Types.Mixed, trim: true, default: "all" },
+  displaySchedule: { type: String, trim: true, default: "all" },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  bar: { type: Schema.ObjectId, ref: "Bar" },
+  user: { type: Schema.ObjectId, ref: "User" },
 });
-
-
 
 /**
  * Pre-remove hook
  */
 
- BarTargetingSchema.pre("remove", function (next) {
+BarTargetingSchema.pre("remove", function (next) {
   // const imager = new Imager(imagerConfig, 'S3');
   // const files = this.image.files;
 
@@ -46,7 +62,7 @@ const BarTargetingSchema = new Schema({
  * Methods
  */
 
- BarTargetingSchema.methods = {
+BarTargetingSchema.methods = {
   /**
    * Save metafield and upload image
    *
@@ -78,29 +94,23 @@ const BarTargetingSchema = new Schema({
  * Statics
  */
 
- BarTargetingSchema.statics = {
-  
+BarTargetingSchema.statics = {
   load: function (_id) {
-    return (
-      this.findOne({ _id })
-        .exec()
-    );
+    return this.findOne({ _id }).exec();
   },
 
   list: function (options) {
     const criteria = options.criteria || {};
     const page = options.page || 0;
     const limit = options.limit || 30;
-    return (
-      this.find(criteria)        
-        .sort({ createdAt: -1 })
-        .limit(limit)
-        .skip(limit * page)
-        .exec()
-    );
+    return this.find(criteria)
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(limit * page)
+      .exec();
   },
 };
-
+BarTargetingSchema.set("timestamps", true);
 const BarTargeting = mongoose.model("BarTargeting", BarTargetingSchema);
 
 module.exports = BarTargeting;

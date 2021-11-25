@@ -83,7 +83,15 @@ const ExcludePages = (props) => {
   ];
 
   useEffect(() => {
-    excludePagePullData({ selected, urlTextField, keywordTextField });
+    let textFieldObj = {};
+    let selectedChoice = selected.find((selected) => selected);
+    selectedChoice == "url" ? (textFieldObj = { url: urlTextField }) : null;
+    selectedChoice == "keyword"
+      ? (textFieldObj = { keyword: keywordTextField })
+      : null;
+
+    excludePagePullData({ selected: selectedChoice, ...textFieldObj });
+
     /*
     return () => {
       cleanup

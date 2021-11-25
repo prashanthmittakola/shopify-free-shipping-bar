@@ -1,14 +1,26 @@
-import { Card, Toast, Frame, Page, Heading, Layout } from "@shopify/polaris";
 import React, { useState } from "react";
+import {
+  Card,
+  Toast,
+  Frame,
+  Page,
+  Heading,
+  Layout,
+  ButtonGroup,
+  Button,
+  Form,
+} from "@shopify/polaris";
 import StepWizard from "react-step-wizard";
+import { Formik, Field } from "formik";
 import ContentConfiguration from "./formSteps/step1";
 import CurrencyConfiguration from "./formSteps/step2";
 import StyleConfiguration from "./formSteps/step3";
 import TargetingConfiguration from "./formSteps/step4";
 import CustomCodeConfiguration from "./formSteps/step5";
 
-const Form = (props) => {
+const Index = (props) => {
   const [previewBarData, setPreviewBarData] = useState({});
+  // console.log("previewBarData",previewBarData);
   const {
     currencyFormat,
     freeShippingGoal,
@@ -19,8 +31,21 @@ const Form = (props) => {
     goalAchievedMsg,
   } = previewBarData;
 
+  /* currencyData */
+  const [currencyData, setCurrencyData] = useState({});
+  // console.log("currencyData",currencyData)
+  const {
+    currencyValue,
+    currencySymbol,
+    currencySymbolPosition,
+  } = currencyData;
+  const pullCurrencyData = (data) => {
+    setCurrencyData(data);
+  };
+
   /*barStyle*/
   const [barStyle, setBarStyle] = useState({});
+  // console.log("barStyle",barStyle);
   const {
     backgroundColor,
     textColor,
@@ -38,15 +63,35 @@ const Form = (props) => {
     setBarStyle(data);
   };
 
-  /* currencyData */
-  const [currencyData, setCurrencyData] = useState({});
-  const {
-    currencyValue,
-    currencySymbol,
-    currencySymbolPosition,
-  } = currencyData;
-  const pullCurrencyData = (data) => {
-    setCurrencyData(data);
+  /* targetingData */
+  const [targetingData, setTargetingData] = useState({});
+  // console.log("targetingData",targetingData);
+  const pullTargetingData = (data) => {
+    setTargetingData(data);
+  };
+  /* customCodeData */
+  const [customCodeData, setCustomCodeData] = useState({});
+  // console.log("customCodeData",customCodeData);
+  const pullCustomCodeData = (data) => {
+    setCustomCodeData(data);
+  };
+  const handleSubmit = () => {
+    const formData = {
+      ...previewBarData,
+      ...currencyData,
+      ...barStyle,
+      ...targetingData,
+      ...customCodeData,
+    };
+    fetch("../api/formSubmit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((res) => console.log({ res }));
   };
 
   return (
@@ -81,31 +126,33 @@ const Form = (props) => {
                   </div>
                 </div>
                 {/* processingBar01 */}
-                <div className="msg2Preview">
-                  <div
-                    className="preview-bar"
-                    style={{
-                      backgroundColor: backgroundColor ?? "black",
-                      color: textColor ?? "white",
-                    }}
-                  >
-                    <span>
-                      {progressMsgBefore}
-                      <span
-                        className="currency"
-                        style={{ color: specialTextColor ?? "red" }}
-                      >
-                        <span className="currency-format">
-                          {currencySymbol ?? currencyFormat}
+                {freeShippingGoal > 0 ? (
+                  <div className="msg2Preview">
+                    <div
+                      className="preview-bar"
+                      style={{
+                        backgroundColor: backgroundColor ?? "black",
+                        color: textColor ?? "white",
+                      }}
+                    >
+                      <span>
+                        {progressMsgBefore}
+                        <span
+                          className="currency"
+                          style={{ color: specialTextColor ?? "red" }}
+                        >
+                          <span className="currency-format">
+                            {currencySymbol ?? currencyFormat}
+                          </span>
+                          <span className="currency-total">
+                            {progressBarShippingGoal}
+                          </span>
                         </span>
-                        <span className="currency-total">
-                          {progressBarShippingGoal}
-                        </span>
+                        {progressMsgAfter}
                       </span>
-                      {progressMsgAfter}
-                    </span>
+                    </div>
                   </div>
-                </div>
+                ) : null}
                 {/* congratsBar */}
                 <div className="msg3Preview">
                   <div
@@ -124,30 +171,40 @@ const Form = (props) => {
         </Card>
         {/* preview section end */}
         <Card sectioned subdued>
-          <div className="card-min-height-500">
-            <StepWizard>
-              <ContentConfiguration
-                stepName={"ContentConfiguration"}
-                pullContentData={(data) => pullContentData(data)}
-              />
-              <CurrencyConfiguration
-                stepName={"CurrencyConfiguration"}
-                pullCurrencyData={(data) => pullCurrencyData(data)}
-              />
-              <StyleConfiguration
-                stepName={"StyleConfiguration"}
-                pullStyleData={(data) => {
-                  pullStyleData(data);
-                }}
-              />
-              <TargetingConfiguration stepName={"targetingConfiguration"} />
-              <CustomCodeConfiguration stepName={"targetingConfiguration"} />
-            </StepWizard>
-          </div>
+          <Form onSubmit={handleSubmit}>
+            <div className="card-min-height-500">
+              <StepWizard>
+                <ContentConfiguration
+                  stepName={"ContentConfiguration"}
+                  pullContentData={(data) => pullContentData(data)}
+                />
+                <CurrencyConfiguration
+                  stepName={"CurrencyConfiguration"}
+                  pullCurrencyData={(data) => pullCurrencyData(data)}
+                />
+                <StyleConfiguration
+                  stepName={"StyleConfiguration"}
+                  pullStyleData={(data) => {
+                    pullStyleData(data);
+                  }}
+                />
+                <TargetingConfiguration
+                  stepName={"targetingConfiguration"}
+                  pullTargetingData={(data) => {
+                    pullTargetingData(data);
+                  }}
+                />
+                <CustomCodeConfiguration
+                  stepName={"CustomCodeConfiguration"}
+                  pullCustomCodeData={(data) => pullCustomCodeData(data)}
+                />
+              </StepWizard>
+            </div>
+          </Form>
         </Card>
       </Frame>
     </section>
   );
 };
 
-export default Form;
+export default Index;

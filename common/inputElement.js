@@ -112,6 +112,9 @@ const InputElement = ({
   connectedRight,
   autoComplete,
   multiline,
+  min,
+  minLength,
+  maxLength,
 }) => {
   return (
     <TextField
@@ -121,16 +124,16 @@ const InputElement = ({
       id={id}
       value={value.toString()}
       onChange={onChange}
-      placeholder={
-        !placeholder ? `Enter ${label ? label : "value"}` : placeholder
-      }
+      placeholder={!placeholder ? ` ` : placeholder}
       autoComplete={autoComplete}
       multiline={multiline}
       style={style}
       error={error}
       helpText={helpText}
       disabled={disabled}
-      min={type == "number" ? 0 : null}
+      min={min}
+      minLength={minLength}
+      maxLength={maxLength}
       connectedRight={connectedRight}
     />
   );

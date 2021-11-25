@@ -13,35 +13,54 @@ const Schema = mongoose.Schema;
  */
 
 const BarSchema = new Schema({
-    name: { type: String, default: "", trim: true, maxlength: 100 },
-    amountGoal: { type: Number, default: "", trim: true, maxlength: 10 },
-    initialMessage: { type: String, default: "", trim: true, maxlength: 50 },
-    progressMessage: { type: String, default: "", trim: true, maxlength: 50 },
-    goalAchievedMessage: { type: String, default: "", trim: true, maxlength: 50 },
-    addLinkToBar: { type: Boolean, default: false },
-    barLink: { type: String, trim: true, maxlength: 200 },
-    closeButton: { type: Boolean, default: false },
-    positionForBar:{ type: String, default: "top" },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
-    user: { type: Schema.ObjectId, ref: "User" },
+  barName: { type: String, default: "", trim: true, maxlength: 100 },
+  freeShippingGoal: { type: Number, default: "", trim: true, maxlength: 10 },
+  initialMsgBeforeAmount: {
+    type: String,
+    default: "",
+    trim: true,
+    maxlength: 50,
+  },
+  initialMsgAfterAmount: {
+    type: String,
+    default: "",
+    trim: true,
+    maxlength: 50,
+  },
+  progressMsgBeforeAmount: {
+    type: String,
+    default: "",
+    trim: true,
+    maxlength: 50,
+  },
+  progressMsgAfterAmount: {
+    type: String,
+    default: "",
+    trim: true,
+    maxlength: 50,
+  },
+  goalAchievedMsg: { type: String, default: "", trim: true, maxlength: 50 },
+  addLinkToBar: { type: Boolean, default: false },
+  barLink: { type: String, trim: true, maxlength: 200 },
+  openLinkInNewTab: { type: Boolean, default: true },
+  includeCloseButton: { type: Boolean, default: true },
+  displayPosition: { type: String, default: "top" },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  user: { type: Schema.ObjectId, ref: "User" },
 });
 
 /**
  * Validations
  */
 
- BarSchema.path("name").required(true, "name cannot be blank");
- BarSchema.path("amountGoal").required(true, "amount for goal cannot be blank");
- BarSchema.path("initialMessage").required(true, "initial message cannot be blank");
- BarSchema.path("progressMessage").required(true, "progress message cannot be blank");
- BarSchema.path("goalAchievedMessage").required(true, "goal achieved message cannot be blank");
+BarSchema.path("barName").required(true, "name cannot be blank");
 
 /**
  * Pre-remove hook
  */
 
- BarSchema.pre("remove", function (next) {
+BarSchema.pre("remove", function (next) {
   // const imager = new Imager(imagerConfig, 'S3');
   // const files = this.image.files;
 
@@ -57,7 +76,7 @@ const BarSchema = new Schema({
  * Methods
  */
 
- BarSchema.methods = {
+BarSchema.methods = {
   /**
    * Save metafield and upload image
    *
@@ -89,29 +108,24 @@ const BarSchema = new Schema({
  * Statics
  */
 
- BarSchema.statics = {
-  
+BarSchema.statics = {
   load: function (_id) {
-    return (
-      this.findOne({ _id })
-        .exec()
-    );
+    return this.findOne({ _id }).exec();
   },
 
   list: function (options) {
     const criteria = options.criteria || {};
     const page = options.page || 0;
     const limit = options.limit || 30;
-    return (
-      this.find(criteria)        
-        .sort({ createdAt: -1 })
-        .limit(limit)
-        .skip(limit * page)
-        .exec()
-    );
+    return this.find(criteria)
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(limit * page)
+      .exec();
   },
 };
 
+BarSchema.set("timestamps", true);
 const Bar = mongoose.model("Bar", BarSchema);
 
 module.exports = Bar;
