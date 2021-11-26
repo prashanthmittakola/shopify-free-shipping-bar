@@ -81,8 +81,8 @@ const StyleConfiguration = (props) => {
   );
 
   /* fontSize */
-  const [fonstSize, setFontSize] = useState(16);
-  const fonstSizeChangeHandler = useCallback((value) => setFontSize(value), []);
+  const [fontSize, setFontSize] = useState(16);
+  const fontSizeChangeHandler = useCallback((value) => setFontSize(value), []);
 
   /* barPadding */
   const [barPadding, setBarPadding] = useState(10);
@@ -126,7 +126,7 @@ const StyleConfiguration = (props) => {
       specialTextColor,
       backgroundOpacity,
       fontFamily,
-      fonstSize,
+      fontSize,
       barPadding,
       disappearAfter,
       delayBeforeRepeating,
@@ -143,7 +143,7 @@ const StyleConfiguration = (props) => {
     specialTextColor,
     backgroundOpacity,
     fontFamily,
-    fonstSize,
+    fontSize,
     barPadding,
     disappearAfter,
     delayBeforeRepeating,
@@ -305,8 +305,8 @@ const StyleConfiguration = (props) => {
               type="number"
               name="font Size"
               id="Name"
-              value={fonstSize}
-              onChange={(value) => fonstSizeChangeHandler(value)}
+              value={fontSize}
+              onChange={(value) => fontSizeChangeHandler(value)}
               helpText={
                 <span>
                   Bar height is determined by Font Size and Bar Padding.

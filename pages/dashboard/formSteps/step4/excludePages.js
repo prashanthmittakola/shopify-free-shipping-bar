@@ -13,7 +13,7 @@ import {
 const ExcludePages = (props) => {
   const { title, id, excludePagePullData } = props;
 
-  const [selected, setSelected] = useState(["all"]);
+  const [selected, setSelected] = useState(["no"]);
 
   const [urlTextField, setUrlTextField] = useState("");
   const handleUrlTextField = useCallback((value) => setUrlTextField(value), []);
